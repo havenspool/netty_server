@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<server>
+    <instances>
+        <instance>com.fir.deer.service.StartupService</instance>
+    </instances>
+
+    <services>
+        <service code="time_check">com.fir.deer.service.TimeCheckService</service>
+        <service code="user_login">com.fir.deer.service.UserLoginService</service>
+        <service code="get_roles">com.fir.deer.service.GetRolesService</service>
+        <service code="new_role">com.fir.deer.service.NewRolesService</service>
+    </services>
+</server>

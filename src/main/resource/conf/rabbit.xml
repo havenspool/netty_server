@@ -1,0 +1,44 @@
+<db>
+    <datasources>
+        <!-- _db_ 为关键字  -->
+        <datasource name="game" default="true" role="1">
+            <driver>com.mysql.jdbc.Driver</driver>
+            <url>jdbc:mysql://127.0.0.1:3306/game?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull</url>
+            <user>root</user>
+            <password>havens</password>
+        </datasource>
+        <datasource name="game_user" role="1">
+            <driver>com.mysql.jdbc.Driver</driver>
+            <url>jdbc:mysql://127.0.0.1:3306/game_user?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull</url>
+            <user>root</user>
+            <password>havens</password>
+        </datasource>
+
+        <datasource name="game" default="true" role="2">
+            <driver>com.mysql.jdbc.Driver</driver>
+            <url>jdbc:mysql://127.0.0.1:3306/game?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull</url>
+            <user>root</user>
+            <password>havens</password>
+        </datasource>
+        <datasource name="game_user" role="2">
+            <driver>com.mysql.jdbc.Driver</driver>
+            <url>jdbc:mysql://127.0.0.1:3306/game_user?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull</url>
+            <user>root</user>
+            <password>havens</password>
+        </datasource>
+    </datasources>
+
+    <afterCacheClass></afterCacheClass>
+
+    <cache>
+        <key_prefix>c_</key_prefix>
+        <sync_time>900000</sync_time>
+        <cluster>false</cluster>
+        <redis>
+            <!--<password>tcteC$cwDG</password>-->
+            <hosts>
+                <host port="6379">127.0.0.1</host>
+            </hosts>
+        </redis>
+    </cache>
+</db>
