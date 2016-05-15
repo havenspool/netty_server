@@ -5,7 +5,6 @@ import com.fir.deer.Service;
 import com.fir.deer.db.redis.RedisClient;
 import com.fir.deer.entity.User;
 import com.fir.deer.entity.dao.UserDao;
-import com.fir.deer.entity.dao.cache.UserCacheDao;
 import com.fir.deer.message.Message;
 import com.fir.deer.message.MessageHelper;
 import com.fir.deer.server.WorldManager;
@@ -38,7 +37,7 @@ public class UserLoginService extends Service {
             return;
         }
         long curTime = System.currentTimeMillis()/1000;
-        user.logintime = curTime+"";
+        user.logintime = curTime;
         RedisClient.set("l_" + user.id, user.id + "," + user.logintime);
         write(user_login("user_login",user));
     }
@@ -53,11 +52,11 @@ public class UserLoginService extends Service {
             userInfo.put("userid",user.id);
             userInfo.put("username",user.name);
             userInfo.put("passwd",user.passwd);
-            userInfo.put("registertime",user.registertime);
-            userInfo.put("logintime",user.logintime);
+            userInfo.put("registertime",user.registertime+"");
+            userInfo.put("logintime",user.logintime+"");
             userInfo.put("userstate",user.userstate);
             userInfo.put("channel",user.channel);
-            userInfo.put("unlocktime",user.unlocktime);
+            userInfo.put("unlocktime",user.unlocktime+"");
         }
         msg_Obj.put("userInfo",userInfo);
         return  Message.newInstance(cmd,msg_Obj);

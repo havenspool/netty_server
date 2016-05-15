@@ -65,8 +65,8 @@ public class NewRolesService extends UserService{
                 map.put("level",role.level);
                 map.put("exp",role.exp);
                 map.put("gold",role.gold);
-                map.put("createtime",role.createtime);
-                map.put("logintime",role.logintime);
+                map.put("createtime",role.createtime+"");
+                map.put("logintime",role.logintime+"");
                 map.put("consecutivedays",role.consecutivedays);
                 map.put("rolestate",role.rolestate);
                 map.put("headimage",role.headimage);

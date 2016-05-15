@@ -11,11 +11,11 @@ public class User extends DBObject {
     public String name;
     public String passwd;
 
-    public String registertime;
-    public String logintime;
-    public Byte userstate;
+    public long registertime;
+    public long logintime;
+    public int userstate;
     public String channel;
-    public String unlocktime;
+    public long unlocktime;
 
     public static void main(String[] args) {
         User user=new User();

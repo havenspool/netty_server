@@ -61,7 +61,7 @@ public class RoleCacheDao extends DBObjectCacheDAO implements RoleDao {
             role.serverid = serverID;
             role.rolename = roleName;
             role.headimage = headImage;
-            role.createtime = System.currentTimeMillis()+"";
+            role.createtime = System.currentTimeMillis()/1000;
             insert(role);
         } catch (DBException e) {
             e.printStackTrace();

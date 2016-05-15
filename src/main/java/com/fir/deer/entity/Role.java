@@ -15,10 +15,10 @@ public class Role extends DBObject {
     public int level;
     public int exp;
     public int gold;
-    public String createtime;
-    public String logintime;
+    public long createtime;
+    public long logintime;
     public int consecutivedays;
-    public byte rolestate;
+    public int rolestate;
     public int headimage;
 
     public UserController userCtrl;
