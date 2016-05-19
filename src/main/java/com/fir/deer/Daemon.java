@@ -5,7 +5,7 @@ import com.fir.deer.server.Server;
 /**
  * Created by havens on 15-8-7.
  */
-public class Deamon{
+public class Daemon{
 
     public static void main(String[] args) throws Exception {
         new Server().run();
