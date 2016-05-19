@@ -9,10 +9,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Created by havens on 15-8-7.
@@ -20,6 +17,10 @@ import java.util.StringTokenizer;
 public class Server implements Runnable{
     public static final String SERVICES_FILE = "services.xml";
     private static final HashMap<String, Class> services=new HashMap<String, Class>();
+
+    public static int port;
+    public static String APP_HOME;
+
 
     public Server(){
     }
@@ -48,7 +49,7 @@ public class Server implements Runnable{
         Set<Class> instances = FileHelper.getInstances();
         for (Class clazz : instances) {
             Service instance = (Service) clazz.newInstance();
-            //instance.create(this);
+            instance.create(this);
         }
     }
 
@@ -77,8 +78,8 @@ public class Server implements Runnable{
             deployServices();
 
             init();
-
-            bind(8090);
+            System.out.println("listen on port:"+port);
+            bind(port);
         }catch (Exception e){
             e.printStackTrace();
         }
