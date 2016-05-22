@@ -20,7 +20,7 @@ public class LoginServiceTest extends RoleServiceTest {
         Map data = new HashMap();
         data.put("serverID",10001);
         data.put("userID",1234567);
-        msg.data=data;
+
         testCon.sendMessage(msg);
         Message myMap =testCon.getMessage();
         Assert.assertNotNull(myMap);
@@ -36,7 +36,7 @@ public class LoginServiceTest extends RoleServiceTest {
         data.put("userID",1234567);
         data.put("roleName","hi");
         data.put("headImage",1);
-        msg.data=data;
+
         testCon.sendMessage(msg);
 
         Message myMap =testCon.getMessage();
@@ -51,7 +51,7 @@ public class LoginServiceTest extends RoleServiceTest {
         Map data = new HashMap();
         data.put("userName","asan");
         data.put("userPwd","123456");
-        msg.data=data;
+
         testCon.sendMessage(msg);
         Thread.sleep(5000);
         Message myMap =testCon.getMessage();

@@ -1,10 +1,16 @@
 package com.fir.deer.client;
 
+import com.fir.deer.Service;
+import com.fir.deer.entity.Role;
 import com.fir.deer.entity.User;
 import com.fir.deer.message.Message;
+import com.fir.deer.message.MessageHelper;
+import com.fir.deer.server.Server;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,32 +26,32 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
         user.name="havens";
         user.passwd="123456";
 
-        Message msg2 = new Message();
-        msg2.cmd = "login";
-        Map data2 = new HashMap();
-        data2.put("id",user.id);
-        data2.put("name",user.name);
-        data2.put("passwd",user.passwd);
-        msg2.data=data2;
-        incoming.writeAndFlush(msg2);
+        Message msg = new Message();
+        msg.cmd = "login";
+        JSONObject jObject=new JSONObject();
+        jObject.put("cmd", "login");
+        jObject.put("id",user.id);
+        jObject.put("name",user.name);
+        jObject.put("passwd",user.passwd);
+        msg.jObject=jObject;
+        msg.dataJson=jObject.toString();
+        incoming.writeAndFlush(msg.dataJson);
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object s) throws Exception {
-        try {
-            Message msg=(Message)s;
-            if(msg.data!=null) {
-                System.out.println("data from server:" + msg.data);
-                Thread.sleep(10000);
-                Message result = new Message();
-                result.cmd = "time_check";
-                result.data= new HashMap();
-                if("login".equals(msg.cmd)||"time_check".equals(msg.cmd)){
-                    ctx.channel().writeAndFlush(result);
-                }
-            }
-        }catch (Exception e){
-           // e.printStackTrace();
+        Message msg=new Message((String)s);
+        if (msg.jObject==null) {
+            return;
+        }
+        msg.channel=ctx.channel();
+        System.out.println("data from server: cmd"+msg.cmd);
+        if("login".equals(msg.cmd)||"time_check".equals(msg.cmd)){
+            JSONObject jObject=new JSONObject();
+            jObject.put("cmd", "login");
+            jObject.put("isSuccess", true);
+            jObject.put("erroeCode", 0);
+            ctx.channel().writeAndFlush(Message.newInstance("login",jObject));
         }
     }
 

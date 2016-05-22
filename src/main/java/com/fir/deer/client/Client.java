@@ -30,7 +30,6 @@ public class Client {
 
             Message msg = new Message();
             msg.cmd = "time_check";
-            msg.data= new HashMap();
 
             Message msg2 = new Message();
             msg2.cmd = "login";
@@ -38,7 +37,6 @@ public class Client {
             data2.put("id",user.id);
             data2.put("name",user.name);
             data2.put("passwd",user.passwd);
-            msg2.data=data2;
 //            channel.writeAndFlush(msg2);
 //            channel.writeAndFlush(msg);
             while(true){

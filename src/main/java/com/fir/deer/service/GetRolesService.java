@@ -2,6 +2,8 @@ package com.fir.deer.service;
 
 import com.fir.deer.entity.Role;
 import com.fir.deer.message.Message;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,19 +16,19 @@ import java.util.Map;
  */
 public class GetRolesService extends UserService{
     @Override
-    public void filter(Map map) throws Exception {
-        int serverID=(Integer) map.get("serverID");
+    public void filter(JSONObject jObject) throws Exception {
+        int serverID=(Integer) jObject.get("serverID");
         write(get_roles("get_roles",userCtrl.getRoles(serverID)));
     }
 
-    public static Message get_roles(String cmd, List<Role> roles) {
-        HashMap<String, Serializable> msg_Obj = new HashMap<String, Serializable>();
-        msg_Obj.put("cmd", cmd);
-        msg_Obj.put("isSuccess", true);
-        msg_Obj.put("erroeCode", 0);
-        ArrayList<HashMap<String, Serializable>> roleList = new ArrayList<HashMap<String, Serializable>>();
+    public static String get_roles(String cmd, List<Role> roles) {
+        JSONObject jObject=new JSONObject();
+        jObject.put("cmd", cmd);
+        jObject.put("isSuccess", true);
+        jObject.put("erroeCode", 0);
+        JSONArray roleList = new JSONArray();
         for(Role role: roles){
-            HashMap<String, Serializable> map = new HashMap<String, Serializable>();
+            JSONObject map=new JSONObject();
             if(role!=null){
                 map.put("id",role.id);
                 map.put("userid",role.userid);
@@ -39,10 +41,10 @@ public class GetRolesService extends UserService{
                 map.put("consecutivedays",role.consecutivedays);
                 map.put("rolestate",role.rolestate);
                 map.put("headimage",role.headimage);
-                roleList.add(map);
+                roleList.put(map);
             }
         }
-        msg_Obj.put("roleInfo",roleList.toArray());
-        return  Message.newInstance(cmd,msg_Obj);
+        jObject.put("roleInfo",roleList.toString());
+        return  Message.newInstance(cmd,jObject);
     }
 }

@@ -17,7 +17,6 @@ public class UDPClientHandler extends SimpleChannelInboundHandler<DatagramPacket
         Channel incoming = ctx.channel();
         Message req = new Message();
         req.cmd = "time_check";
-        req.data= new HashMap();
         incoming.writeAndFlush(UDPMessage.send(req));
         System.out.println("UDPClientHandler channelActive:" + req);
     }
@@ -25,7 +24,7 @@ public class UDPClientHandler extends SimpleChannelInboundHandler<DatagramPacket
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
         Message msg= UDPMessage.receive(packet);
-        if (msg == null||msg.data==null) {
+        if (msg == null) {
             return;
         }
         System.out.println("UDPClientHandler channelRead0:" + msg);

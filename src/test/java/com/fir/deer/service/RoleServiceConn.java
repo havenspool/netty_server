@@ -52,7 +52,7 @@ public class RoleServiceConn extends SimpleChannelInboundHandler<Object> {
         Map data = new HashMap();
         data.put("userName",userName);
         data.put("userPwd",userPwd);
-        msg.data=data;
+
         channel.writeAndFlush(msg);
     }
 

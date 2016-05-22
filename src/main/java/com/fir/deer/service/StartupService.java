@@ -3,6 +3,7 @@ package com.fir.deer.service;
 import com.fir.deer.Service;
 import com.fir.deer.dfa.DfaTool;
 import com.fir.deer.server.Server;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class StartupService extends Service {
         DfaTool.loadJsonData();
     }
 
-    public void filter(Map map) throws Exception {
+    public void filter(JSONObject jObject) throws Exception {
 
     }
 }

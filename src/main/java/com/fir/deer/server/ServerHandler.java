@@ -26,8 +26,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
     }
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object s) throws Exception { // (4)
-        Message msg=(Message)s;
-        if (msg == null||msg.data==null) {
+        Message msg=new Message((String)s);
+        if (msg.jObject==null) {
             return;
         }
         msg.channel=ctx.channel();
@@ -35,7 +35,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
         System.out.println("Client: cmd"+msg.cmd);
         if(service!=null){
             service.setChannel(msg.channel);
-            service.filter(msg.data);
+            service.filter(msg.jObject);
         }
     }
 

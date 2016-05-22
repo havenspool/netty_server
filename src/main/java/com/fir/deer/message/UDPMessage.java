@@ -3,6 +3,7 @@ package com.fir.deer.message;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.socket.DatagramPacket;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
@@ -34,15 +35,15 @@ public class UDPMessage {
     public static void main(String[] args){
         Message msg = new Message();
         msg.cmd = "time_check";
-        msg.data= new HashMap();
-        msg.data.put("ctime", System.currentTimeMillis() / 1000);
-        System.out.println(msg.data);
+        JSONObject jObject=new JSONObject();
+        jObject.put("cmd", "time_check");
+        jObject.put("ctime", System.currentTimeMillis()/1000);
+        msg.jObject=jObject;
+        msg.dataJson=jObject.toString();
 
-        DatagramPacket packet=send(msg);
-        System.out.println(packet);
-        Message msg2= receive(packet);
-        System.out.println(msg2.cmd);
-        System.out.println(msg2.data);
+        System.out.println(msg.dataJson);
+
+        System.out.println(MessageHelper.time_check());
 
     }
 

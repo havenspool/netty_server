@@ -14,7 +14,7 @@ public class UDPSeverHandler extends SimpleChannelInboundHandler<DatagramPacket>
     protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
         Message msg= UDPMessage.receive(packet);
         System.out.println("UDPSeverHandler channelRead0:" + msg);
-        if (msg == null||msg.data==null) {
+        if (msg == null) {
             return;
         }
 

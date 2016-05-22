@@ -8,21 +8,18 @@ import com.fir.deer.entity.dao.UserDao;
 import com.fir.deer.message.Message;
 import com.fir.deer.message.MessageHelper;
 import com.fir.deer.server.WorldManager;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import org.json.JSONObject;
 
 /**
  * Created by havens on 15-8-11.
  */
 public class UserLoginService extends Service {
     @Override
-    public void filter(Map map) throws Exception {
-        String userName=(String)map.get("userName");
-        String userPwd=(String)map.get("userPwd");
-        String version=(String)map.get("version");
-        String channel=(String)map.get("channel");
+    public void filter(JSONObject jObject) throws Exception {
+        String userName=(String)jObject.get("userName");
+        String userPwd=(String)jObject.get("userPwd");
+        String version=(String)jObject.get("version");
+        String channel=(String)jObject.get("channel");
 
         if(userName==""){
             write(MessageHelper.cmd_error("user_login", false, ErrorCode.USER_NOT_EXIST));
@@ -42,12 +39,12 @@ public class UserLoginService extends Service {
         write(user_login("user_login",user));
     }
 
-    public static Message user_login(String cmd,User user) {
-        HashMap<String, Serializable> msg_Obj = new HashMap<String, Serializable>();
-        msg_Obj.put("cmd", cmd);
-        msg_Obj.put("isSuccess", true);
-        msg_Obj.put("erroeCode", 0);
-        HashMap<String, Serializable> userInfo = new HashMap<String, Serializable>();
+    public static String user_login(String cmd,User user) {
+        JSONObject jObject=new JSONObject();
+        jObject.put("cmd", cmd);
+        jObject.put("isSuccess", true);
+        jObject.put("erroeCode", 0);
+        JSONObject userInfo=new JSONObject();
         if(user!=null){
             userInfo.put("userid",user.id);
             userInfo.put("username",user.name);
@@ -58,7 +55,7 @@ public class UserLoginService extends Service {
             userInfo.put("channel",user.channel);
             userInfo.put("unlocktime",user.unlocktime+"");
         }
-        msg_Obj.put("userInfo",userInfo);
-        return  Message.newInstance(cmd,msg_Obj);
+        jObject.put("userInfo",userInfo);
+        return  Message.newInstance(cmd,jObject);
     }
 }

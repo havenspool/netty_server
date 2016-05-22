@@ -2,6 +2,7 @@ package com.fir.deer.service;
 
 import com.fir.deer.Service;
 import com.fir.deer.message.MessageHelper;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 public class TimeCheckService extends Service {
 
     @Override
-    public void filter(Map map) throws Exception {
+    public void filter(JSONObject jObject) throws Exception {
         write(MessageHelper.time_check());
     }
 }

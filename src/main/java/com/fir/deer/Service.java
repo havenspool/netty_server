@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.fir.deer.message.Message;
+import org.json.JSONObject;
 
 /**
  * Created by havens on 15-8-11.
@@ -31,12 +32,12 @@ public abstract class Service {
         return this.channel;
     }
 
-    protected void write(Message msg) throws IOException {
-        channel.writeAndFlush(msg);
+    protected void write(String json) throws IOException {
+        channel.writeAndFlush(json);
     }
-    public final void service(final Map map) throws Exception {
-        if (beforeFilter(map)) {
-            filter(map);
+    public final void service(JSONObject jObject) throws Exception {
+        if (beforeFilter(jObject)) {
+            filter(jObject);
             afterFilter();
         }
     }
@@ -44,12 +45,12 @@ public abstract class Service {
     public void create(Server server) throws Exception {
     }
 
-    public boolean beforeFilter(final Map map) throws Exception {
+    public boolean beforeFilter(final JSONObject jObject) throws Exception {
         return true;
     }
 
     public void afterFilter() throws Exception {
     }
 
-    public abstract void filter(Map map) throws Exception;
+    public abstract void filter(final JSONObject jObject) throws Exception;
 }
