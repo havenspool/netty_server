@@ -23,25 +23,9 @@ public class Client {
                     .handler(new ClientChannelHaindler());
             Channel channel = bootstrap.connect(host, port).sync().channel();
            // BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            User user=new User();
-            user.id=10001;
-            user.name="havens";
-            user.passwd="123456";
-
-            Message msg = new Message();
-            msg.cmd = "time_check";
-
-            Message msg2 = new Message();
-            msg2.cmd = "login";
-            Map data2 = new HashMap();
-            data2.put("id",user.id);
-            data2.put("name",user.name);
-            data2.put("passwd",user.passwd);
-//            channel.writeAndFlush(msg2);
-//            channel.writeAndFlush(msg);
             while(true){
 //              channel.writeAndFlush((Object)(in.readLine() +"\r\n"));
-//                channel.writeAndFlush(msg);
+                channel.writeAndFlush("{\"userName\":\"asan\",\"userPwd\":\"123456\",\"cmd\":\"user_login\"}");
 //                channel.writeAndFlush(msg2);
 //                channel.writeAndFlush(msg);
                 //channel.writeAndFlush(msg2);
@@ -64,7 +48,7 @@ public class Client {
             new Thread(new Runnable() {
                 public void run() {
                     try {
-                        new Client().connect(8090, "127.0.0.1");
+                        new Client().connect(8090, "119.29.254.14");
                     }catch (Exception e){
                         e.printStackTrace();
                     }

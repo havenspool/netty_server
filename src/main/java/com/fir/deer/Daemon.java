@@ -1,6 +1,7 @@
 package com.fir.deer;
 
 import com.fir.deer.server.Server;
+import com.fir.deer.server.WorldManager;
 import com.fir.deer.utils.FileHelper;
 
 import java.io.PrintWriter;
@@ -17,6 +18,8 @@ public class Daemon{
         Properties config = FileHelper.getProperties(SERVER_PROP);
         Server.port = Integer.valueOf(config.getProperty("port", "8090")).intValue();
         Server.APP_HOME = config.getProperty("app_home", "/home/havens/Code/deer/");
+
+        WorldManager.User_DB = config.getProperty("user_db", "deer_user");
     }
 
     public static void main(String[] args) throws Exception {

@@ -33,7 +33,9 @@ public abstract class Service {
     }
 
     protected void write(String json) throws IOException {
+        System.out.println("write:"+json);
         channel.writeAndFlush(json);
+        System.out.println("write after:"+json);
     }
     public final void service(JSONObject jObject) throws Exception {
         if (beforeFilter(jObject)) {

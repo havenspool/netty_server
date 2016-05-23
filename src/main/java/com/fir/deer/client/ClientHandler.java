@@ -45,7 +45,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
             return;
         }
         msg.channel=ctx.channel();
-        System.out.println("data from server: cmd"+msg.cmd);
+        System.out.println("data from server: cmd:"+msg.cmd+" json:"+msg.dataJson);
         if("login".equals(msg.cmd)||"time_check".equals(msg.cmd)){
             JSONObject jObject=new JSONObject();
             jObject.put("cmd", "login");

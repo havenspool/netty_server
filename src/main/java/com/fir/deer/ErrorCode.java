@@ -4,7 +4,6 @@ package com.fir.deer;
  * Created by havens on 16-5-14.
  */
 public final class ErrorCode {
-    public final static int DATA_NOT_EXIST=1001;//数据不存在
     public final static int USER_NOT_EXIST=1001;//用户不存在
     public final static int PASS_ERROR=1002;//密码错误
     public final static int ALREADY_ONLINE=1003;//已经在线

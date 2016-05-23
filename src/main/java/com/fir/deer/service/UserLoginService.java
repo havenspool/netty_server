@@ -16,10 +16,11 @@ import org.json.JSONObject;
 public class UserLoginService extends Service {
     @Override
     public void filter(JSONObject jObject) throws Exception {
+        System.out.println(jObject.toString());
         String userName=(String)jObject.get("userName");
         String userPwd=(String)jObject.get("userPwd");
-        String version=(String)jObject.get("version");
-        String channel=(String)jObject.get("channel");
+//        int version=(Integer) jObject.get("version");
+//        String channel=(String)jObject.get("channel");
 
         if(userName==""){
             write(MessageHelper.cmd_error("user_login", false, ErrorCode.USER_NOT_EXIST));
@@ -35,7 +36,9 @@ public class UserLoginService extends Service {
         }
         long curTime = System.currentTimeMillis()/1000;
         user.logintime = curTime;
+        System.out.println("pre" + user.id + "," + user.logintime);
         RedisClient.set("l_" + user.id, user.id + "," + user.logintime);
+        System.out.println("after" + user.id + "," + user.logintime);
         write(user_login("user_login",user));
     }
 

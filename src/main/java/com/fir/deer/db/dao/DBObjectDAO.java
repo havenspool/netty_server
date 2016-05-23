@@ -25,8 +25,7 @@ public abstract class DBObjectDAO implements DAO {
     public void setQueryRunner(QueryRunner masterRunner,QueryRunner slaveRunner) {
         this.masterRunner = masterRunner;
         this.slaveRunner = slaveRunner;
-        innerInsertRunner = new GenKeyQueryRunner<Long>(masterRunner.getDataSource(),
-                new ScalarHandler<Long>());
+        innerInsertRunner = new GenKeyQueryRunner<Long>(masterRunner.getDataSource(),new ScalarHandler<Long>());
     }
 
     public void setIdGenerator(IdGenerator idGen) {

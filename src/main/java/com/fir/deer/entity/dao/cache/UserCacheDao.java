@@ -7,6 +7,7 @@ import com.fir.deer.db.rs.MapToDBObjectHandler;
 import com.fir.deer.entity.User;
 import com.fir.deer.entity.dao.UserDao;
 import com.fir.deer.server.WorldManager;
+import org.apache.commons.dbutils.QueryRunner;
 
 import java.sql.SQLException;
 
@@ -15,14 +16,19 @@ import java.sql.SQLException;
  */
 public class UserCacheDao extends DBObjectCacheDAO implements UserDao{
 
+    private QueryRunner masterUserRunner;
+    private QueryRunner slaveUserRunner;
+
     public UserCacheDao() {
         super(DataSourceManager.getQueryRunner(WorldManager.User_DB, KeyWords.MASTER),DataSourceManager.getQueryRunner(WorldManager.User_DB,KeyWords.SLAVE));
+        this.masterUserRunner = DataSourceManager.getQueryRunner(WorldManager.User_DB, KeyWords.MASTER);
+        this.slaveUserRunner = DataSourceManager.getQueryRunner(WorldManager.User_DB, KeyWords.SLAVE);
     }
 
     public User getUser(int id){
         User user=null;
         try {
-            user =slaveRunner.query("select * from users where id = ? ",new MapToDBObjectHandler<User>(User.class), id);
+            user =slaveUserRunner.query("select * from users where id = ? ",new MapToDBObjectHandler<User>(User.class), id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -33,7 +39,7 @@ public class UserCacheDao extends DBObjectCacheDAO implements UserDao{
     public User getUser(String name){
         User user=null;
         try {
-            user = slaveRunner.query("select * from users where name = ? ",new MapToDBObjectHandler<User>(User.class), name);
+            user = slaveUserRunner.query("select * from users where name = ? ",new MapToDBObjectHandler<User>(User.class), name);
         } catch (SQLException e) {
             e.printStackTrace();
         }
