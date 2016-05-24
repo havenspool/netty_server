@@ -2,8 +2,9 @@ package com.fir.deer.server;
 
 import com.fir.deer.Service;
 import com.fir.deer.message.Message;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
@@ -11,7 +12,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 /**
  * Created by havens on 15-8-7.
  */
-public class ServerHandler extends SimpleChannelInboundHandler<Object> {
+public class ServerHandler extends ChannelInboundHandlerAdapter{
 
     public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
@@ -25,18 +26,33 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
         channels.remove(ctx.channel());
     }
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object s) throws Exception { // (4)
-        Message msg=new Message((String)s);
+    public void channelRead(ChannelHandlerContext ctx, Object s) throws Exception { // (4)
+        System.out.println("Client from" );
+        ByteBuf result = (ByteBuf) s;
+        byte[] result1 = new byte[result.readableBytes()];
+        // msg中存储的是ByteBuf类型的数据，把数据读取到byte[]中
+        result.readBytes(result1);
+        String resultStr = new String(result1);
+        // 释放资源，这行很关键
+        result.release();
+        System.out.println("Client said:" + resultStr);
+        Message msg=new Message(resultStr);
         if (msg.jObject==null) {
             return;
         }
         msg.channel=ctx.channel();
         Service service=Server.service(msg.cmd);
-        System.out.println("Client: cmd"+msg.cmd);
+        System.out.println("Client: cmd:"+msg.cmd);
         if(service!=null){
             service.setChannel(msg.channel);
             service.filter(msg.jObject);
         }
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        super.channelReadComplete(ctx);
+        ctx.flush();
     }
 
     @Override

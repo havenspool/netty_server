@@ -1,36 +1,33 @@
 package com.fir.deer;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 
 /**
  * Created by havens on 16-5-24.
  */
 public class TestClient {
-    static Socket server;
-
     public static void main(String[] args) throws Exception {
-        server = new Socket("127.0.0.1", 8090);
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                server.getInputStream()));
-        PrintWriter out = new PrintWriter(server.getOutputStream());
-        BufferedReader wt = new BufferedReader(new InputStreamReader(System.in));
-        out.println("{\"userName\":\"asan\",\"userPwd\":\"123456\",\"cmd\":\"user_login\"}");
+        Socket server = new Socket();
+        server.connect(new InetSocketAddress("119.29.254.14", 8090));
+        server.setKeepAlive(true);
+        OutputStream out = server.getOutputStream();
+        ByteBuffer header = ByteBuffer.allocate(4);
+        String sendMsg="{\"userName\":\"asan\",\"userPwd\":\"123456\",\"cmd\":\"user_login\"}";
+        byte[] msg=sendMsg.getBytes();
+        header.putInt(msg.length);
+        out.write(header.array());
+        out.write(msg);
         out.flush();
-//        while (true) {
-//            String str = wt.readLine();
-//            out.println(str);
-//            System.out.println(str);
-//            out.flush();
-//            if (str.equals("end")) {
-//                break;
-//            }
-//        }
-        while (true){
-            System.out.println(in.readLine());
+        InputStream in = server.getInputStream();
+        byte[] buff = new byte[4096];
+        int readed = in.read(buff);
+        if(readed > 0){
+            String str = new String(buff,4,readed);
+            System.out.println("client received msg from server:"+str);
         }
-//        server.close();
+        out.close();
     }
 }

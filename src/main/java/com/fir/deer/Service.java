@@ -1,6 +1,7 @@
 package com.fir.deer;
 
 import com.fir.deer.server.Server;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 
 import java.io.IOException;
@@ -33,8 +34,10 @@ public abstract class Service {
     }
 
     protected void write(String json) throws IOException {
-        System.out.println("write:"+json);
-        channel.writeAndFlush(json);
+        // 在当前场景下，发送的数据必须转换成ByteBuf数组
+        ByteBuf encoded = channel.alloc().buffer(4 * json.length());
+        encoded.writeBytes(json.getBytes());
+        channel.writeAndFlush(encoded);
         System.out.println("write after:"+json);
     }
     public final void service(JSONObject jObject) throws Exception {

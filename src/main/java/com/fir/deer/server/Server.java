@@ -21,6 +21,11 @@ public class Server implements Runnable{
     public static int port;
     public static String APP_HOME;
 
+    protected static final int BIZGROUPSIZE = Runtime.getRuntime().availableProcessors()*2; //默认
+    protected static final int BIZTHREADSIZE = 4;
+    private static final EventLoopGroup bossGroup = new NioEventLoopGroup(BIZGROUPSIZE);
+    private static final EventLoopGroup workerGroup = new NioEventLoopGroup(BIZTHREADSIZE);
+
 
     public Server(){
     }
@@ -87,13 +92,12 @@ public class Server implements Runnable{
 
     public void bind(int port) throws Exception {
         // 配置服务端的NIO线程组
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .option(ChannelOption.SO_BACKLOG, 1024)
+                    .option(ChannelOption.SO_BACKLOG, 1024)//最大客户端连接数为1024
+                    .option(ChannelOption.TCP_NODELAY, true)
                     .childHandler(new ServerChannelHandler());
             // 绑定端口，同步等待成功
             ChannelFuture f = b.bind(port).sync();
