@@ -10,12 +10,15 @@ import io.netty.handler.codec.Delimiters;
 
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.bytes.ByteArrayDecoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import io.netty.handler.codec.marshalling.MarshallingDecoder;
 import io.netty.handler.codec.marshalling.MarshallingEncoder;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.string.StringDecoder;
@@ -28,13 +31,16 @@ public class ServerChannelHandler extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         //LengthFieldBasedFrameDecoder和LengthFieldPrepender就是设定协议头长度的，我这里设定协议头的长度为4个字节。
-        ch.pipeline().addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
-        ch.pipeline().addLast("frameEncoder", new LengthFieldPrepender(4));
+//        ch.pipeline().addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
+//        ch.pipeline().addLast("frameEncoder", new LengthFieldPrepender(4));
 //        ch.pipeline().addLast("decoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,4,0,4));
 //        ch.pipeline().addLast("encoder", new LengthFieldPrepender(4, false));
 //        ch.pipeline().addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
 //        ch.pipeline().addLast("decoder", new MessageDecoder());
 //        ch.pipeline().addLast("encoder", new MessageEncoder());
+
+          ch.pipeline().addLast("decoder", new ByteArrayDecoder());
+          ch.pipeline().addLast("encoder", new ByteArrayEncoder());
 //        ch.pipeline().addLast("decoder", new StringDecoder());//字符串长度不能超过1024
 //        ch.pipeline().addLast("encoder", new StringEncoder());//字符串长度不能超过1024
 //        ch.pipeline().addLast("decoder", MarshallingCodeCFactory.buildMarshallingDecoder());

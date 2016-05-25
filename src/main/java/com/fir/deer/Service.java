@@ -35,9 +35,10 @@ public abstract class Service {
 
     protected void write(String json) throws IOException {
         // 在当前场景下，发送的数据必须转换成ByteBuf数组
-        ByteBuf encoded = channel.alloc().buffer(4 * json.length());
-        encoded.writeBytes(json.getBytes());
-        channel.writeAndFlush(encoded);
+//        ByteBuf encoded = channel.alloc().buffer(4 * json.length());
+//        encoded.writeBytes(json.getBytes());
+        System.out.println("channel isWritable:"+channel.isWritable());
+        channel.writeAndFlush(json.getBytes("UTF-8"));
         System.out.println("write after:"+json);
     }
     public final void service(JSONObject jObject) throws Exception {

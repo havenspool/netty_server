@@ -5,6 +5,7 @@ import com.fir.deer.message.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
@@ -12,7 +13,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 /**
  * Created by havens on 15-8-7.
  */
-public class ServerHandler extends ChannelInboundHandlerAdapter{
+public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
@@ -27,14 +28,18 @@ public class ServerHandler extends ChannelInboundHandlerAdapter{
     }
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object s) throws Exception { // (4)
-        System.out.println("Client from" );
-        ByteBuf result = (ByteBuf) s;
-        byte[] result1 = new byte[result.readableBytes()];
+//        System.out.println("Client from" +s);
+//        ByteBuf result = (ByteBuf) s;
+//        byte[] result1 = new byte[result.readableBytes()];
+//        // msg中存储的是ByteBuf类型的数据，把数据读取到byte[]中
+//        result.readBytes(result1);
+//        String resultStr = new String(result1);
+//        // 释放资源，这行很关键
+//        result.release();
+        System.out.println("Client from" +s);
+        byte[] result1 = (byte[])s;
         // msg中存储的是ByteBuf类型的数据，把数据读取到byte[]中
-        result.readBytes(result1);
         String resultStr = new String(result1);
-        // 释放资源，这行很关键
-        result.release();
         System.out.println("Client said:" + resultStr);
         Message msg=new Message(resultStr);
         if (msg.jObject==null) {
