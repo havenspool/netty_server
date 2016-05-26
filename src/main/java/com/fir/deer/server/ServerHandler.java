@@ -41,6 +41,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         // msg中存储的是ByteBuf类型的数据，把数据读取到byte[]中
         String resultStr = new String(result1);
         System.out.println("Client said:" + resultStr);
+        ctx.channel().writeAndFlush(resultStr);
         Message msg=new Message(resultStr);
         if (msg.jObject==null) {
             return;
@@ -62,6 +63,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
+        String sendMsg="{\"userName\":\"asan\",\"userPwd\":\"123456\",\"cmd\":\"user_login\"}";
+        byte[] msg=sendMsg.getBytes("UTF-8");
+        ctx.channel().writeAndFlush(msg);
         System.out.println("Client:"+ctx.channel().remoteAddress()+"链接");
     }
 
