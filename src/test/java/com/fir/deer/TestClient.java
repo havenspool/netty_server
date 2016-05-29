@@ -18,11 +18,10 @@ public class TestClient {
 
         ByteBuffer header = ByteBuffer.allocate(4);
         String sendMsg="{\"userName\":\"asan\",\"userPwd\":\"123456\",\"cmd\":\"user_login\"}";
-        byte[] msg=sendMsg.getBytes("UTF-8");
-//        byte[] header=new byte[4];
-
-        header.putInt(msg.length);
+        header.putInt(sendMsg.getBytes().length);
 //        out.write(header.array());
+//        byte[] msg=new byte[sendMsg.getBytes().length+2];
+//        out.write(msg);
         out.write(sendMsg.getBytes("UTF-8"));
         out.flush();
 
