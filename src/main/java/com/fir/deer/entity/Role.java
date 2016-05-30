@@ -2,6 +2,7 @@ package com.fir.deer.entity;
 
 import com.fir.deer.Controller.UserController;
 import com.fir.deer.db.DBObject;
+import com.fir.deer.db.IdGenerator;
 
 /**
  * Created by havens on 15-8-11.
@@ -9,17 +10,17 @@ import com.fir.deer.db.DBObject;
 public class Role extends DBObject {
     public String table_name="roles";
     public int id;
-    public long userid;
-    public int serverid;
-    public String rolename;
+    public long userId;
+    public int serverId;
+    public String roleName;
     public int level;
     public int exp;
     public int gold;
-    public long createtime;
-    public long logintime;
-    public int consecutivedays;
-    public int rolestate;
-    public int headimage;
+    public long createTime;
+    public long loginTime;
+    public int consecutiveDays;
+    public int roleState;
+    public int headImage;
 
     public UserController userCtrl;
 }

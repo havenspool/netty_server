@@ -31,11 +31,11 @@ public class RoleCacheDao extends DBObjectCacheDAO implements RoleDao {
             if (innerDao == null) {
                 innerDao = new RoleCacheDao();
             }
-            return innerDao._getHeroes(userId);
+            return innerDao._getRoles(userId);
         }
     });
 
-    private List<Role> _getHeroes(Integer userId) {
+    private List<Role> _getRoles(Integer userId) {
         List<Role> roleList;
         try {
             roleList = slaveRunner.query("select * from roles where userId = ?", MapToDBObject.newListHandler(Role.class), userId);
@@ -46,22 +46,54 @@ public class RoleCacheDao extends DBObjectCacheDAO implements RoleDao {
         return roleList;
     }
 
-    public Role getHero(int id) {
-        return null;
+    private static LoadingCache<Integer, Role> allHeroes = CacheBuilder.newBuilder().maximumSize(Constants.MAX_CACHE_NUM_SIZE).build(new CacheLoader<Integer, Role>() {
+        public Role load(Integer roleId) throws Exception {
+            if (innerDao == null) {
+                innerDao = new RoleCacheDao();
+            }
+            return innerDao._getRole(roleId);
+        }
+    });
+
+    private Role _getRole(Integer roleId) {
+        Role role=null;
+        try {
+            role = slaveRunner.query("select * from roles where id = ?", MapToDBObject.newRsHandler(Role.class), roleId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if ((role == null) || (role.id == 0)) {
+            return null;
+        }
+        return role;
     }
 
-    public Role getHero(String name) {
-        return null;
+    public Role getHero(int roleId) throws DBException{
+        return allHeroes.getUnchecked(roleId);
     }
 
-    public Role createHero(int userID, int serverID, String roleName, int headImage) {
+    public Role getHero(String roleName) throws DBException{
+        Role role=null;
+        try {
+            role = slaveRunner.query("select * from roles where name = ?", MapToDBObject.newRsHandler(Role.class), roleName);
+        } catch (SQLException e) {
+            throw new DBException(e.getMessage());
+        }
+        return role;
+    }
+
+    public List<Role> getRoles(int userId) throws DBException {
+        return userHeroes.getUnchecked(userId);
+    }
+
+    public Role createHero(int userId, int serverId, String roleName, int headImage) {
         Role role = new Role();
         try {
-            role.userid = userID;
-            role.serverid = serverID;
-            role.rolename = roleName;
-            role.headimage = headImage;
-            role.createtime = System.currentTimeMillis()/1000;
+            role.userId = userId;
+            role.serverId = serverId;
+            role.roleName = roleName;
+            role.headImage = headImage;
+            role.createTime = System.currentTimeMillis()/1000;
             insert(role);
         } catch (DBException e) {
             e.printStackTrace();

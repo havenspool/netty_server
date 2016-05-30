@@ -5,11 +5,7 @@ import com.fir.deer.message.Message;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by havens on 16-5-14.
@@ -17,8 +13,9 @@ import java.util.Map;
 public class GetRolesService extends UserService{
     @Override
     public void filter(JSONObject jObject) throws Exception {
-        int serverID=(Integer) jObject.get("serverID");
-        write(get_roles("get_roles",userCtrl.getRoles(serverID)));
+        int serverId=(Integer) jObject.get("serverId");
+        int userId=(Integer) jObject.get("userId");
+        write(get_roles("get_roles",userCtrl.getRoles(serverId)));
     }
 
     public static String get_roles(String cmd, List<Role> roles) {
@@ -31,16 +28,16 @@ public class GetRolesService extends UserService{
             JSONObject map=new JSONObject();
             if(role!=null){
                 map.put("id",role.id);
-                map.put("userid",role.userid);
-                map.put("rolename",role.rolename);
+                map.put("userId",role.userId);
+                map.put("roleName",role.roleName);
                 map.put("level",role.level);
                 map.put("exp",role.exp);
                 map.put("gold",role.gold);
-                map.put("createtime",role.createtime+"");
-                map.put("logintime",role.logintime+"");
-                map.put("consecutivedays",role.consecutivedays);
-                map.put("rolestate",role.rolestate);
-                map.put("headimage",role.headimage);
+                map.put("createTime",role.createTime);
+                map.put("loginTime",role.loginTime);
+                map.put("consecutiveDays",role.consecutiveDays);
+                map.put("roleState",role.roleState);
+                map.put("headImage",role.headImage);
                 roleList.put(map);
             }
         }

@@ -1,11 +1,13 @@
 package com.fir.deer.entity.dao.cache;
 
+import com.fir.deer.db.DBException;
 import com.fir.deer.db.KeyWords;
 import com.fir.deer.db.cache.DBObjectCacheDAO;
 import com.fir.deer.db.DataSourceManager;
 import com.fir.deer.db.rs.MapToDBObjectHandler;
 import com.fir.deer.entity.User;
 import com.fir.deer.entity.dao.UserDao;
+import com.fir.deer.entity.idGenerator.UserIdGenerator;
 import com.fir.deer.server.WorldManager;
 import org.apache.commons.dbutils.QueryRunner;
 
@@ -19,8 +21,11 @@ public class UserCacheDao extends DBObjectCacheDAO implements UserDao{
     private QueryRunner masterUserRunner;
     private QueryRunner slaveUserRunner;
 
+    private static final UserIdGenerator idGenerator = new UserIdGenerator(WorldManager.SERVER_ID);
+
     public UserCacheDao() {
         super(DataSourceManager.getQueryRunner(WorldManager.User_DB, KeyWords.MASTER),DataSourceManager.getQueryRunner(WorldManager.User_DB,KeyWords.SLAVE));
+        this.idGen = idGenerator;
         this.masterUserRunner = DataSourceManager.getQueryRunner(WorldManager.User_DB, KeyWords.MASTER);
         this.slaveUserRunner = DataSourceManager.getQueryRunner(WorldManager.User_DB, KeyWords.SLAVE);
     }
@@ -46,20 +51,20 @@ public class UserCacheDao extends DBObjectCacheDAO implements UserDao{
         return user;
     }
 
-    public void insert(User user) {
+    public void insert(User user) throws DBException {
         insert(user);
     }
 
-    public void update(User user) {
+    public void update(User user) throws DBException{
         update(user);
     }
 
-    public void delete(User user) {
+    public void delete(User user) throws DBException{
         delete(user);
     }
 
-    public void deleteById(int id) {
-        delete(getUser(id));
+    public void deleteById(int userId) throws DBException{
+        delete(getUser(userId));
     }
 
 }

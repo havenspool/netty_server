@@ -3,8 +3,8 @@ package com.fir.deer.entity.dao;
 /**
  * Created by havens on 15-8-13.
  */
-public interface DBFactory {
-    void init();
-    UserDao userDao();
-    RoleDao roleDao();
+public abstract interface DBFactory {
+    public abstract void init();
+    public abstract UserDao userDao();
+    public abstract RoleDao roleDao();
 }

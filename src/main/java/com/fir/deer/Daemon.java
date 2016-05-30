@@ -20,6 +20,7 @@ public class Daemon{
         Server.APP_HOME = config.getProperty("app_home", "/home/havens/Code/deer/");
 
         WorldManager.User_DB = config.getProperty("user_db", "deer_user");
+        WorldManager.SERVER_ID = Integer.valueOf(config.getProperty("server_id", "10001")).intValue();
     }
 
     public static void main(String[] args) throws Exception {

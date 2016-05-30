@@ -1,6 +1,7 @@
 package com.fir.deer.entity;
 
 import com.fir.deer.db.DBObject;
+import com.fir.deer.db.IdGenerator;
 
 /**
  * Created by havens on 15-8-10.
@@ -11,18 +12,15 @@ public class User extends DBObject {
     public String name;
     public String passwd;
 
-    public long registertime;
-    public long logintime;
-    public int userstate;
+    public long registerTime;
+    public long loginTime;
+    public int userState;// 1正常 2封号
     public String channel;
-    public long unlocktime;
+    public long unlockTime;
 
-    public static void main(String[] args) {
-        User user=new User();
-        user.id=10001;
-        user.name="havens";
-        user.passwd="123456";
-        System.out.println(user.toString());
+    public void generateId(String table, IdGenerator idGen){
+        if ((this.table_name.equals(table)) && (idGen != null))
+            this.id = idGen.generateLongId().longValue();
     }
 
 }

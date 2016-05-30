@@ -17,7 +17,7 @@ public class TestClient {
         InputStream in = server.getInputStream();
 
         ByteBuffer header = ByteBuffer.allocate(4);
-        String sendMsg="{\"userName\":\"asan\",\"userPwd\":\"123456\",\"cmd\":\"user_login\"}";
+        String sendMsg="{\"userName\":\"asan\",\"userPwd\":\"123456\",\"channel\":\"SYGF\",\"cmd\":\"user_login\"}";
         header.putInt(sendMsg.getBytes().length);
 //        out.write(header.array());
 //        byte[] msg=new byte[sendMsg.getBytes().length+2];

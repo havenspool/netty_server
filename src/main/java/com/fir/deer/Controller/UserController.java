@@ -3,6 +3,7 @@ package com.fir.deer.Controller;
 import com.fir.deer.entity.Role;
 import com.fir.deer.entity.User;
 import com.fir.deer.entity.dao.DBFactory;
+import com.fir.deer.entity.dao.RoleDao;
 import com.fir.deer.entity.dao.UserDao;
 
 import java.util.ArrayList;
@@ -13,17 +14,20 @@ import java.util.List;
  */
 public class UserController {
     public User user;
+    private List<Role> roles = new ArrayList();
+
     public UserController(User user) {
         this.user = user;
     }
 
     private DBFactory dbFactory;
+    private RoleDao roleDao = null;
+    private UserDao userDao = null;
 
     public void initDAO(DBFactory dbFactory) {
         this.dbFactory = dbFactory;
     }
 
-    private UserDao userDao = null;
     public UserDao userDao() {
         if (userDao == null) {
             userDao = dbFactory.userDao();
@@ -31,10 +35,19 @@ public class UserController {
         return userDao;
     }
 
-    public List<Role> getRoles(int serverId){
-        List<Role> roleList=new ArrayList<Role>();
+    public RoleDao roleDao() {
+        if (roleDao == null) {
+            roleDao = dbFactory.roleDao();
+        }
+        return roleDao;
+    }
 
-        return roleList;
+    public List<Role> getRoles(int serverId){
+        return roles;
+    }
+
+    public void roles(List<Role> roles){
+        this.roles=roles;
     }
 
 }

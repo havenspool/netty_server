@@ -2,6 +2,7 @@ package com.fir.deer.server;
 
 import com.fir.deer.Constants;
 import com.fir.deer.Controller.UserController;
+import com.fir.deer.db.DBException;
 import com.fir.deer.entity.User;
 import com.fir.deer.entity.dao.DBFactory;
 import com.fir.deer.entity.dao.cache.DBFactoryCache;
@@ -14,17 +15,20 @@ import com.google.common.cache.LoadingCache;
  */
 public class WorldManager {
     public static String User_DB;  //UserDB
+    public static int SERVER_ID;  //serverId
 
     private DBFactory dbFactory;
     private static WorldManager god;
+    Server server;
 
     private WorldManager(Server server){
+        this.server=server;
         dbFactory = new DBFactoryCache();
         dbFactory.init();
     }
 
     private void buildUpTheWorld() {
-
+        System.err.println("===== BUILD UP THE WORLD ======");
     }
 
     public static WorldManager getInstance(Server server) {
@@ -44,6 +48,11 @@ public class WorldManager {
         user.id = userId;
         UserController userCtrl = new UserController(user);
         userCtrl.initDAO(dbFactory);
+        try {
+            userCtrl.roles(userCtrl.roleDao().getRoles(userId));
+        } catch (DBException e) {
+            e.printStackTrace();
+        }
         return userCtrl;
     }
 

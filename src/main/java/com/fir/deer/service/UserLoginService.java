@@ -20,7 +20,7 @@ public class UserLoginService extends Service {
         String userName=(String)jObject.get("userName");
         String userPwd=(String)jObject.get("userPwd");
 //        int version=(Integer) jObject.get("version");
-//        String channel=(String)jObject.get("channel");
+        String channel=(String)jObject.get("channel");
 
         if(userName==""){
             write(MessageHelper.cmd_error("user_login", false, ErrorCode.USER_NOT_EXIST));
@@ -30,15 +30,28 @@ public class UserLoginService extends Service {
         WorldManager worldManager = WorldManager.getInstance();
         UserDao userDao = worldManager.dbFactory().userDao();
         User user = userDao.getUser(userName);
-        if (user == null || !user.passwd.equals(userPwd)) {
-            write(MessageHelper.cmd_error("user_login", false, ErrorCode.PASS_ERROR));
-            return;
-        }
         long curTime = System.currentTimeMillis()/1000;
-        user.logintime = curTime;
-        System.out.println("pre" + user.id + "," + user.logintime);
-        RedisClient.set("l_" + user.id, user.id + "," + user.logintime);
-        System.out.println("after" + user.id + "," + user.logintime);
+        if(user == null){
+            user=new User();
+            user.name=userName;
+            user.passwd=userPwd;
+            user.channel=channel;
+            user.registerTime=curTime;
+            user.loginTime=curTime;
+            user.userState=1;
+            user.unlockTime=0;
+            userDao.insert(user);
+        }else{
+            if (userPwd==null||(!userPwd.equals(user.passwd))) {
+                write(MessageHelper.cmd_error("user_login", false, ErrorCode.PASS_ERROR));
+                return;
+            }
+            user.loginTime = curTime;
+            System.out.println(user);
+//            userDao.update(user);
+        }
+
+        RedisClient.set("l_" + user.id, user.id + "," + user.loginTime);
         write(user_login("user_login",user));
     }
 
@@ -49,14 +62,14 @@ public class UserLoginService extends Service {
         jObject.put("erroeCode", 0);
         JSONObject userInfo=new JSONObject();
         if(user!=null){
-            userInfo.put("userid",user.id);
-            userInfo.put("username",user.name);
+            userInfo.put("userId",user.id);
+            userInfo.put("userName",user.name);
             userInfo.put("passwd",user.passwd);
-            userInfo.put("registertime",user.registertime+"");
-            userInfo.put("logintime",user.logintime+"");
-            userInfo.put("userstate",user.userstate);
+            userInfo.put("registerTime",user.registerTime);
+            userInfo.put("loginTime",user.loginTime);
+            userInfo.put("userState",user.userState);
             userInfo.put("channel",user.channel);
-            userInfo.put("unlocktime",user.unlocktime+"");
+            userInfo.put("unlockTime",user.unlockTime);
         }
         jObject.put("userInfo",userInfo);
         return  Message.newInstance(cmd,jObject);
