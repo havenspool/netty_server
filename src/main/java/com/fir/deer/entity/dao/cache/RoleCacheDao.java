@@ -102,15 +102,15 @@ public class RoleCacheDao extends DBObjectCacheDAO implements RoleDao {
         return role;
     }
 
-    public void update(Role role) {
+    public void updateRole(Role role) throws DBException{
+        update(role);
+    }
+
+    public void deleteRole(Role role) throws DBException{
 
     }
 
-    public void delete(Role role) {
-
-    }
-
-    public void deleteById(int id) {
+    public void deleteRoleById(int id) throws DBException{
 
     }
 }

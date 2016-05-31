@@ -40,15 +40,14 @@ public class UserLoginService extends Service {
             user.loginTime=curTime;
             user.userState=1;
             user.unlockTime=0;
-            userDao.insert(user);
+            userDao.insertUser(user);
         }else{
             if (userPwd==null||(!userPwd.equals(user.passwd))) {
                 write(MessageHelper.cmd_error("user_login", false, ErrorCode.PASS_ERROR));
                 return;
             }
             user.loginTime = curTime;
-            System.out.println(user);
-//            userDao.update(user);
+            userDao.updateUser(user);
         }
 
         RedisClient.set("l_" + user.id, user.id + "," + user.loginTime);

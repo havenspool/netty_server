@@ -30,8 +30,8 @@ public class LoginJob extends BaseJob implements Runnable{
         if(size>0){
             synchronized (lock) {
                 Message msg= INSTANCE.take();
-                Service service= Server.service(msg.cmd);
-                System.out.println(service);
+//                Service service= Server.service(msg.cmd);
+//                System.out.println(service);
                 size--;
             }
         }

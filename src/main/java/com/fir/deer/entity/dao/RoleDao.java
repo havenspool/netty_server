@@ -13,7 +13,7 @@ public abstract interface RoleDao {
     Role getHero(String name) throws DBException;
     List<Role> getRoles(int userId) throws DBException;
     Role createHero(int userId,int serverId,String roleName,int headImage);
-    void update(Role role);
-    void delete(Role role);
-    void deleteById(int id);
+    void updateRole(Role role) throws DBException;
+    void deleteRole(Role role) throws DBException;
+    void deleteRoleById(int id) throws DBException;
 }

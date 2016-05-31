@@ -1,5 +1,6 @@
 package com.fir.deer.Controller;
 
+import com.fir.deer.db.DBException;
 import com.fir.deer.entity.Role;
 import com.fir.deer.entity.User;
 import com.fir.deer.entity.dao.DBFactory;
@@ -42,8 +43,15 @@ public class UserController {
         return roleDao;
     }
 
-    public List<Role> getRoles(int serverId){
-        return roles;
+    public List<Role> getRoles(int userId){
+        List<Role> list=null;
+        try {
+            list=roleDao.getRoles(userId);
+        } catch (DBException e) {
+            e.printStackTrace();
+            list=new ArrayList<Role>();
+        }
+        return list;
     }
 
     public void roles(List<Role> roles){

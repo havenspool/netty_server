@@ -2,16 +2,28 @@ package com.fir.deer.server;
 
 import com.fir.deer.Service;
 import com.fir.deer.message.Message;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by havens on 15-8-7.
  */
 public class ServerHandler extends ChannelInboundHandlerAdapter {
+
+    Server server;
+    protected Map<String, Service> myservices = new HashMap<String, Service>();
+    public ServerHandler(Server server){
+        this.server=server;
+    }
 
     public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
@@ -44,12 +56,32 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             return;
         }
         msg.channel=ctx.channel();
-        Service service=Server.service(msg.cmd);
-        if(service!=null){
-            System.out.println("from Client:" + msg.dataJson);
+        Service service = myservices.get(msg.cmd);
+        if (service == null) {
+            service = server.service(msg.cmd);
             service.setChannel(msg.channel);
-            service.filter(msg.jObject);
+            myservices.put(msg.cmd, service);
         }
+        service(service, msg.jObject);
+
+//        Service service=server.service(msg.cmd);
+//        if(service!=null){
+//            System.out.println("from Client:" + msg.dataJson);
+//            service.setChannel(msg.channel);
+//            service.filter(msg.jObject);
+//        }
+    }
+
+    protected boolean service(Service service, final JSONObject jObject) throws IOException {
+        if (service == null) {
+            return false;
+        }
+        try {
+            service.service(jObject);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     @Override

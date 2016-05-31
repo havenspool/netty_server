@@ -23,14 +23,17 @@ public abstract class UserService extends Service{
         worldManager = WorldManager.getInstance(server);
     }
 
-    public boolean beforeFilter(final JSONObject jObject) throws Exception {
-        int userid=(Integer) jObject.get("userID");
-        if(userid==0){
+    public boolean beforeFilter(JSONObject jObject) throws Exception {
+        int userId=(Integer) jObject.get("userId");
+        if(userId==0){
             write(MessageHelper.cmd_error(cmd, false, ErrorCode.USER_NOT_EXIST));
             return false;
         }
-        userCtrl=worldManager.onlineUser().getUnchecked(userid);
+        userCtrl=worldManager.onlineUser().getUnchecked(userId);
         return true;
+    }
+
+    public void afterFilter() throws Exception {
     }
 
 }

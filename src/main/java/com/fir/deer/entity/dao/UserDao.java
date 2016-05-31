@@ -9,8 +9,8 @@ import com.fir.deer.entity.User;
 public abstract interface UserDao {
     User getUser(int id);
     User getUser(String name);
-    void insert(User user) throws DBException;
-    void update(User user) throws DBException;
-    void delete(User user) throws DBException;
-    void deleteById(int id) throws DBException;
+    void insertUser(User user) throws DBException;
+    void updateUser(User user) throws DBException;
+    void deleteUser(User user) throws DBException;
+    void deleteUserById(int id) throws DBException;
 }

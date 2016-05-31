@@ -5,6 +5,7 @@ import com.fir.deer.message.Message;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,9 @@ public class GetRolesService extends UserService{
     public void filter(JSONObject jObject) throws Exception {
         int serverId=(Integer) jObject.get("serverId");
         int userId=(Integer) jObject.get("userId");
-        write(get_roles("get_roles",userCtrl.getRoles(serverId)));
+        String roleName=(String) jObject.get("roleName");
+        System.out.println(roleName);
+        write(get_roles("get_roles",userCtrl.getRoles(userId)));
     }
 
     public static String get_roles(String cmd, List<Role> roles) {

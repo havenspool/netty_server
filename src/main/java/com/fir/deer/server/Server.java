@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class Server implements Runnable{
     public static final String SERVICES_FILE = "services.xml";
-    private static final HashMap<String, Class> services=new HashMap<String, Class>();
+    private final HashMap<String, Class> services;
 
     public static int port;
     public static String APP_HOME;
@@ -28,9 +28,10 @@ public class Server implements Runnable{
 
 
     public Server(){
+        services=new HashMap<String, Class>();
     }
 
-    public static Service service(String code) {
+    public Service service(String code) {
         synchronized (services) {
             Class clazz = services.get(code);
             if (clazz == null) {
@@ -41,6 +42,7 @@ public class Server implements Runnable{
             Service service = null;
             try {
                 service = (Service) clazz.newInstance();
+                service.create(this);
                 service.setCmd(code);
             } catch (Exception e) {
 //                e.printStackTrace(out);
@@ -98,7 +100,7 @@ public class Server implements Runnable{
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024)//最大客户端连接数为1024
                     .option(ChannelOption.TCP_NODELAY, true)
-                    .childHandler(new ServerChannelHandler());
+                    .childHandler(new ServerChannelHandler(this));
             // 绑定端口，同步等待成功
             ChannelFuture f = b.bind(port).sync();
 

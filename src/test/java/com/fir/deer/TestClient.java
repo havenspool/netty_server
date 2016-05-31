@@ -11,18 +11,19 @@ import java.nio.ByteBuffer;
 public class TestClient {
     public static void main(String[] args) throws Exception {
         Socket server = new Socket();
-        server.connect(new InetSocketAddress("127.0.0.1", 8090));//119.29.254.14  127.0.0.1
+        server.connect(new InetSocketAddress("127.0.0.1", 8260));//119.29.254.14  127.0.0.1
         server.setKeepAlive(true);
         OutputStream out = server.getOutputStream();
         InputStream in = server.getInputStream();
 
         ByteBuffer header = ByteBuffer.allocate(4);
         String sendMsg="{\"userName\":\"asan\",\"userPwd\":\"123456\",\"channel\":\"SYGF\",\"cmd\":\"user_login\"}";
+        String msg="{\"serverId\":10001,\"userId\":1001,\"roleName\":\"哈哈\",\"cmd\":\"get_roles\"}";
         header.putInt(sendMsg.getBytes().length);
 //        out.write(header.array());
 //        byte[] msg=new byte[sendMsg.getBytes().length+2];
 //        out.write(msg);
-        out.write(sendMsg.getBytes("UTF-8"));
+        out.write(msg.getBytes("UTF-8"));
         out.flush();
 
         byte[] buff = new byte[4096];

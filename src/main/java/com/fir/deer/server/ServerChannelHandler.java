@@ -28,6 +28,11 @@ import io.netty.handler.codec.string.StringEncoder;
  * Created by havens on 15-8-7.
  */
 public class ServerChannelHandler extends ChannelInitializer<SocketChannel> {
+    Server server;
+    public ServerChannelHandler(Server server){
+        this.server=server;
+    }
+
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         //LengthFieldBasedFrameDecoder和LengthFieldPrepender就是设定协议头长度的，我这里设定协议头的长度为4个字节。
@@ -52,7 +57,7 @@ public class ServerChannelHandler extends ChannelInitializer<SocketChannel> {
 //        //编码用
 //        ch.pipeline().addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
 //        ch.pipeline().addLast("protobufEncoder", new ProtobufEncoder());
-        ch.pipeline().addLast(new ServerHandler());
+        ch.pipeline().addLast(new ServerHandler(server));
         //System.out.println("Client:" + ch.remoteAddress() + "连接上");
     }
 }
