@@ -8,6 +8,7 @@ import com.fir.deer.entity.dao.UserDao;
 import com.fir.deer.message.Message;
 import com.fir.deer.message.MessageHelper;
 import com.fir.deer.server.WorldManager;
+import com.fir.deer.utils.StringHelper;
 import org.json.JSONObject;
 
 /**
@@ -16,11 +17,9 @@ import org.json.JSONObject;
 public class UserLoginService extends Service {
     @Override
     public void filter(JSONObject jObject) throws Exception {
-        System.out.println(jObject.toString());
-        String userName=(String)jObject.get("userName");
-        String userPwd=(String)jObject.get("userPwd");
-//        int version=(Integer) jObject.get("version");
-        String channel=(String)jObject.get("channel");
+        String userName= StringHelper.getString(jObject,"userName");
+        String userPwd= StringHelper.getString(jObject,"userPwd");
+        String channel= StringHelper.getString(jObject,"channel");
 
         if(userName==""){
             write(MessageHelper.cmd_error("user_login", false, ErrorCode.USER_NOT_EXIST));

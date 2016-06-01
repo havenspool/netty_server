@@ -5,14 +5,12 @@ import com.fir.deer.dfa.DFAOutCallBack;
 import com.fir.deer.dfa.DfaTool;
 import com.fir.deer.entity.Role;
 import com.fir.deer.entity.dao.RoleDao;
-import com.fir.deer.message.Message;
 import com.fir.deer.message.MessageHelper;
 import com.fir.deer.server.WorldManager;
-import org.json.JSONArray;
+import com.fir.deer.utils.StringHelper;
 import org.json.JSONObject;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,9 +26,11 @@ public class NewRolesService extends UserService{
 
     @Override
     public void filter(JSONObject jObject) throws Exception {
-        int userId=(Integer) jObject.get("userId");
-        int serverId=(Integer) jObject.get("serverId");
-        String roleName=(String) jObject.get("roleName");
+        int serverId= StringHelper.getInt(jObject,"serverId");
+        int userId= StringHelper.getInt(jObject,"userId");
+
+        String roleName= StringHelper.getString(jObject,"roleName");
+
         int headImage=(Integer) jObject.get("headImage");
 
         MyDFAOutCallBack myDFAOutCallBack = new MyDFAOutCallBack();

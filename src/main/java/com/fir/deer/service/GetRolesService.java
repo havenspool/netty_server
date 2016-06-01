@@ -2,6 +2,7 @@ package com.fir.deer.service;
 
 import com.fir.deer.entity.Role;
 import com.fir.deer.message.Message;
+import com.fir.deer.utils.StringHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,9 +15,9 @@ import java.util.List;
 public class GetRolesService extends UserService{
     @Override
     public void filter(JSONObject jObject) throws Exception {
-        int serverId=(Integer) jObject.get("serverId");
-        int userId=(Integer) jObject.get("userId");
-        String roleName=(String) jObject.get("roleName");
+        int serverId= StringHelper.getInt(jObject,"serverId");
+        int userId= StringHelper.getInt(jObject,"userId");
+        String roleName= StringHelper.getString(jObject,"roleName");
         System.out.println(roleName);
         write(get_roles("get_roles",userCtrl.getRoles(userId)));
     }
@@ -44,7 +45,7 @@ public class GetRolesService extends UserService{
                 roleList.put(map);
             }
         }
-        jObject.put("roleInfo",roleList.toString());
+        jObject.put("roleInfo",roleList);
         return  Message.newInstance(cmd,jObject);
     }
 }

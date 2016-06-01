@@ -6,6 +6,7 @@ import com.fir.deer.Service;
 import com.fir.deer.message.MessageHelper;
 import com.fir.deer.server.Server;
 import com.fir.deer.server.WorldManager;
+import com.fir.deer.utils.StringHelper;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -24,7 +25,7 @@ public abstract class UserService extends Service{
     }
 
     public boolean beforeFilter(JSONObject jObject) throws Exception {
-        int userId=(Integer) jObject.get("userId");
+        int userId= StringHelper.getInt(jObject,"userId");
         if(userId==0){
             write(MessageHelper.cmd_error(cmd, false, ErrorCode.USER_NOT_EXIST));
             return false;
